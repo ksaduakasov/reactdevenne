@@ -38,8 +38,8 @@ export default class Profile extends Component {
         </header>
         <p>
           <strong>Token:</strong>{" "}
-          {currentUser.accessToken.substring(0, 20)} ...{" "}
-          {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
+          {currentUser.authenticationToken.substring(0, 20)} ...{" "}
+          {currentUser.authenticationToken.substr(currentUser.authenticationToken.length - 20)}
         </p>
         <p>
           <strong>Id:</strong>{" "}
