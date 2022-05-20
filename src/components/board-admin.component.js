@@ -16,18 +16,11 @@ export default class BoardAdmin extends Component {
     componentDidMount() {
         UserService.getAdminBoard().then(
             response => {
-                console.log(response.data)
-                console.log(typeof response.data)
-                response.data.forEach(function (arrayItem) {
-                    console.log(arrayItem.team.name);
-                    console.log(arrayItem.creator.email)
-                });
                 this.setState({
                     teams: response.data
                 });
             },
             error => {
-                //console.log(UserService.getAdminBoard())
                 this.setState({
                     content:
                         (error.response &&
@@ -48,12 +41,12 @@ export default class BoardAdmin extends Component {
         this.state.teams.map(team => (
             <tr>
                 <td>
-                    <Link to={"/team/" + team.team.id}>
-                        {team.team.name}
+                    <Link to={"/team/" + team.id}>
+                        {team.name}
                     </Link>
                 </td>
-                <td>{team.topic.name}</td>
-                <td>{team.advisor.first_name} {team.advisor.last_name}</td>
+                <td>{team.topic}</td>
+                <td>{team.advisor}</td>
             </tr>
         ));
 

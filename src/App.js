@@ -16,6 +16,7 @@ import Team from "./components/team.component";
 
 // import AuthVerify from "./common/auth-verify";
 import EventBus from "./common/EventBus";
+import Defence from "./components/defence.component";
 
 class App extends Component {
   constructor(props) {
@@ -36,8 +37,8 @@ class App extends Component {
     if (user) {
       this.setState({
         currentUser: user,
-         showModeratorBoard: user.role.name.includes("ROLE_COMMISSION"),
-         showAdminBoard: user.role.name.includes("ROLE_ADMIN"),
+         showModeratorBoard: user.role.includes("ROLE_COMMISSION"),
+         showAdminBoard: user.role.includes("ROLE_ADMIN"),
       });
     }
     
@@ -140,6 +141,7 @@ class App extends Component {
             <Route path="/mod" component={BoardModerator} />
             <Route path="/admin" component={BoardAdmin} />
             <Route path="/team/:id" component={Team} />
+            <Route path="/defence/:id" component={Defence} />
           </Switch>
         </div>
 
