@@ -1,10 +1,7 @@
 import React, {Component} from "react";
 import EventBus from "../common/EventBus";
 import TeamService from "../services/team.service";
-import Route from "react-router-dom/es/Route";
-import Defence from "./defence.component";
 import {Link} from "react-router-dom";
-import Switch from "react-router-dom/es/Switch";
 
 
 export default class Team extends Component {
@@ -16,7 +13,8 @@ export default class Team extends Component {
             creator: {creator: ""},
             topic: {topic: ""},
             advisor: {advisor: ""},
-            defence: {defence: ""},
+            defences: [],
+            members: []
         };
     }
 
@@ -29,7 +27,8 @@ export default class Team extends Component {
                     topic: response.data.topic,
                     creator: response.data.creator,
                     advisor: response.data.advisor,
-                    defence: response.data.defence
+                    defences: response.data.defences,
+                    members: response.data.members
                 });
             },
                 error => {
@@ -48,49 +47,124 @@ export default class Team extends Component {
             )
     };
 
-    teamDescription = () => (
-        <tr>
-            <td>{this.state.team.name}</td>
-            <td>{this.state.topic.name}</td>
-            <td>{this.state.advisor.first_name} {this.state.advisor.last_name}</td>
-            <td>{this.state.advisor.email}</td>
-            <td>{this.state.creator.first_name} {this.state.creator.last_name}</td>
-            <td>{this.state.creator.email}</td>
-            <td>{this.state.defence ? this.state.defence?.defence_date : "Not Selected"}</td>
-        </tr>
-    )
+    getListMembers = () =>
+        this.state.members.map((member, index) => (
+            <div>
+                <div className="row">
+                    <div className="col-sm-3">
+                        <h6 className="mb-0">Team Member #{++index}</h6>
+                    </div>
+                    <div className="col-sm-9 text-secondary">
+                        {member.first_name} {member.last_name}
+                    </div>
+                </div>
+                <hr/>
+                <div className="row">
+                    <div className="col-sm-3">
+                        <h6 className="mb-0">Team Member #{index} Mail</h6>
+                    </div>
+                    <div className="col-sm-9 text-secondary">
+                        {member.email}
+                    </div>
+                </div>
+                <hr/>
+            </div>
+        ));
+
+    getListDefences = () =>
+        this.state.defences.map((defence, index) => (
+            <div>
+                <div className="row">
+                    <div className="col-sm-3">
+                        <h6 className="mb-0">{defence.stage.name}</h6>
+                    </div>
+                    <div className="col-sm-9 text-secondary">
+                        {defence.grade === null ? "Not Graded" : defence.grade}
+                    </div>
+                </div>
+                <hr/>
+                <div className="row">
+                    <div className="col-sm-3">
+                        <h6 className="mb-0">{defence.stage.name} Date</h6>
+                    </div>
+                    <div className="col-sm-9 text-secondary">
+                        {defence.defenceDate.join("-")}
+                    </div>
+                </div>
+                <hr/>
+            </div>
+        ));
+
 
 
     render() {
         return (
-            <div className="container">
-                <table className="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">Team Name</th>
-                        <th scope="col">Project Topic</th>
-                        <th scope="col">Advisor</th>
-                        <th scope="col">Advisor's Mail</th>
-                        <th scope="col">Team Lead</th>
-                        <th scope="col">Team Lead's Mail</th>
-                        <th scope="col">Defence Date</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {this.teamDescription()}
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <Link to={"/defence/" + this.state.team.id} className="btn btn-secondary align-self-center">Set Defence Date</Link>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    </tbody>
-                </table>
+            <div className="col">
+                <div className="card mb-3">
+                    <div className="card-body">
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <h6 className="mb-0">Team Name</h6>
+                            </div>
+                            <div className="col-sm-9 text-secondary">
+                                {this.state.team.name}
+                            </div>
+                        </div>
+                        <hr/>
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <h6 className="mb-0">Topic Name</h6>
+                            </div>
+                            <div className="col-sm-9 text-secondary">
+                                {this.state.topic.name}
+                            </div>
+                        </div>
+                        <hr/>
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <h6 className="mb-0">Advisor</h6>
+                            </div>
+                            <div className="col-sm-9 text-secondary">
+                                {this.state.advisor.first_name} {this.state.advisor.last_name}
+                            </div>
+                        </div>
+                        <hr/>
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <h6 className="mb-0">Advisor's Mail</h6>
+                            </div>
+                            <div className="col-sm-9 text-secondary">
+                                {this.state.advisor.email}
+                            </div>
+                        </div>
+                        <hr/>
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <h6 className="mb-0">Team Creator</h6>
+                            </div>
+                            <div className="col-sm-9 text-secondary">
+                                {this.state.creator.first_name} {this.state.creator.last_name}
+                            </div>
+                        </div>
+                        <hr/>
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <h6 className="mb-0">Team Creator's Mail</h6>
+                            </div>
+                            <div className="col-sm-9 text-secondary">
+                                {this.state.creator.email}
+                            </div>
+                        </div>
+                        <hr/>
+                        {this.getListMembers()}
+                        {this.getListDefences()}
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <a className="btn btn-info " target="__blank">Set Defence</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
